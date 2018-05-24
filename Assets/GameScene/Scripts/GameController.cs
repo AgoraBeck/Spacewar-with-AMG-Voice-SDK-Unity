@@ -247,9 +247,21 @@ public class GameController : MonoBehaviour {
 		isInAgoraAudio = true;
 
 		if (ApplicationModal.AudioGameProfile == 1) {
+
+        #if UNITY_IOS || UNITY_ANDROID
 			mRtcEngine.SetClientRole (CLIENT_ROLE.BROADCASTER);
+        #else
+			mRtcEngine.SetClientRole (CLIENT_ROLE.AUDIENCE, null);
+        #endif
+
 		} else if (ApplicationModal.AudioGameProfile == 2) {
+
+        #if UNITY_IOS || UNITY_ANDROID
 			mRtcEngine.SetClientRole (CLIENT_ROLE.AUDIENCE);
+        #else
+			mRtcEngine.SetClientRole (CLIENT_ROLE.AUDIENCE,null);
+        #endif
+
 		}
 
 		SetLocalVoicePitch (pitchSlider.PitchValue ());
@@ -277,7 +289,12 @@ public class GameController : MonoBehaviour {
 	public void CommanderChange (bool isCommander) {
 		if (isInAgoraAudio) {
 			CLIENT_ROLE role = isCommander ? CLIENT_ROLE.BROADCASTER : CLIENT_ROLE.AUDIENCE;
+        #if UNITY_IOS || UNITY_ANDROI
 			mRtcEngine.SetClientRole (role);
+        #else
+			mRtcEngine.SetClientRole (role, null);
+        #endif           
+
 		}
 	}
 
